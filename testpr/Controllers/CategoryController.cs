@@ -29,6 +29,11 @@ namespace testpr.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Category obj)
         {
+            if (obj.Name == obj.DisplayOrder.ToString())
+            {
+                ModelState.AddModelError("add custoom error", "the display cannot exactly be the same as name");
+            }
+
             if (ModelState.IsValid)
             {
                 _db.categories.Add(obj);
