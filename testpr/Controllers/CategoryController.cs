@@ -17,10 +17,25 @@ namespace testpr.Controllers
             IEnumerable<Category> objCategoryList = _db.categories;
             return View(objCategoryList);
         }
-
+        
+        // GET
         public IActionResult Create()
         {
             return View();
+        }
+
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Category obj)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.categories.Add(obj);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(obj);
         }
     }
 }
