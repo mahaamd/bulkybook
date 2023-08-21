@@ -13,9 +13,9 @@
         </div>
 
         <div class="col-6 text-end">
-          <a asp-controller = "Category" asp-action="Create" class="btn btn-primary">
-              create new category
-          </a>
+            <a asp-controller="Category" asp-action="Create" class="btn btn-primary">
+                create new category
+            </a>
         </div>
 
     </div>
@@ -25,15 +25,16 @@
 
 
 <table class="table table-bordered table-stripped" style="width:100%">
-    
+
     <thead>
         <tr>
-        <th>
-            Category Name
-        </th>
-        <th>
-            Dispaly Order number one
-        </th>
+            <th>
+                Category Name
+            </th>
+            <th>
+                Dispaly Order number one
+            </th>
+             <th></th>       
         </tr>
     </thead>
     <tbody>
@@ -47,6 +48,11 @@
                 <td width="30%">
                     @item.DisplayOrder
                 </td>
+                <td>
+                    <a class="btn btn-primary mx-2" asp-controller="Category" asp-action="Edit" asp-route-id="@item.Id"> Edit </a>
+                    <a class="btn btn-secondary mx-2 btn btn-d" asp-controller="Category" asp-action="Delete" asp-route-id="@item.Id"> Delete </a>
+                </td>
+               
             </tr>
         }
 
