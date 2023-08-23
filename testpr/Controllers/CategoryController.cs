@@ -38,6 +38,7 @@ namespace testpr.Controllers
             {
                 _db.categories.Add(obj);
                 _db.SaveChanges();
+                TempData["success"] = "data added successfully";
                 return RedirectToAction("Index");
             }
             return View(obj);
@@ -73,6 +74,7 @@ namespace testpr.Controllers
             {
                 _db.categories.Update(obj);
                 _db.SaveChanges();
+                TempData["success"] = "data edited successfully";
                 return RedirectToAction("Index");
             }
             return View(obj);
@@ -107,6 +109,7 @@ namespace testpr.Controllers
 
             _db.categories.Remove(categoryFromDb);
             _db.SaveChanges();
+            TempData["success"] = "data removed successfully";
             return RedirectToAction("Index");
 
 
