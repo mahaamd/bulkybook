@@ -1,20 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using testpr.Data;
 using testpr.Models;
+using testpr.Repository;
 
 namespace testpr.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _db;
-        public CategoryController(ApplicationDbContext db)
+        private readonly ICategotyRepository _db;
+        public CategoryController(ICategotyRepository db)
         {
             _db = db;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Category> objCategoryList = _db.categories;
+            IEnumerable<Category> objCategoryList = _db.GetAll();
             return View(objCategoryList);
         }
 
@@ -36,8 +37,8 @@ namespace testpr.Controllers
 
             if (ModelState.IsValid)
             {
-                _db.categories.Add(obj);
-                _db.SaveChanges();
+                _db.Add(obj);
+                _db.Save();
                 TempData["success"] = "data added successfully";
                 return RedirectToAction("Index");
             }
@@ -51,7 +52,7 @@ namespace testpr.Controllers
             {
                 return NotFound();
             }
-            var categoryFromDb = _db.categories.Find(id);
+            var categoryFromDb = _db.GetFirstOrDefault(u => u.Id == id);
             if (categoryFromDb == null)
             {
                 return NotFound();
@@ -72,8 +73,8 @@ namespace testpr.Controllers
 
             if (ModelState.IsValid)
             {
-                _db.categories.Update(obj);
-                _db.SaveChanges();
+                _db.Update(obj);
+                _db.Save();
                 TempData["success"] = "data edited successfully";
                 return RedirectToAction("Index");
             }
@@ -86,7 +87,7 @@ namespace testpr.Controllers
             {
                 return NotFound();
             }
-            var categoryFromDb = _db.categories.Find(id);
+            var categoryFromDb = _db.GetFirstOrDefault(u=> u.Id == id);
             if (categoryFromDb == null)
             {
                 return NotFound();
@@ -100,15 +101,15 @@ namespace testpr.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(int? id)
         {
-            var categoryFromDb = _db.categories.Find(id);
+            var categoryFromDb = _db.GetFirstOrDefault(u => u.Id == id);
             
             if (categoryFromDb == null)
             {
                 return NotFound();
             }
 
-            _db.categories.Remove(categoryFromDb);
-            _db.SaveChanges();
+            _db.Remove(categoryFromDb);
+            _db.Save();
             TempData["success"] = "data removed successfully";
             return RedirectToAction("Index");
 
