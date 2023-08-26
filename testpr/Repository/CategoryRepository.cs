@@ -4,10 +4,10 @@ using testpr.Models;
 
 namespace testpr.Repository
 {
-    public class CategoryRepository : Repository<Category>, ICategotyRepository
+    public class CategoryRepository : Repository<Category>, ICategoryRepository
     {
         private ApplicationDbContext _db;
-        public CategoryRepository(ApplicationDbContext db) : base(db)
+        public CategoryRepository(ApplicationDbContext db): base(db)
         {
             _db = db;
         }
@@ -17,9 +17,9 @@ namespace testpr.Repository
             _db.categories.Update(category);
         }
 
-        public void Save()
-        {
-            _db.SaveChanges();
-        }
+        //public void Save()
+        //{
+        //    _db.SaveChanges();
+        //}
     }
 }
