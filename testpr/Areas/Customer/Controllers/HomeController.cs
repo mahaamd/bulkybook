@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using testpr.Models;
 
-namespace testpr.Controllers
+namespace testpr.Areas.Customer.Controllers
 {
     public class HomeController : Controller
     {

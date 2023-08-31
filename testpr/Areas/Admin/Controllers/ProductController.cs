@@ -4,19 +4,20 @@ using testpr.Models;
 using testpr.Repository;
 using testpr.Repository.IRepository;
 
-namespace testpr.Controllers
+namespace testpr.Areas.Admin.Controllers
 {
-    public class CategoryController : Controller
+//[Area("Admin")]
+    public class ProductController : Controller
     {
         private readonly IUnitOfWork _db;
-        public CategoryController(IUnitOfWork db)
+        public ProductController(IUnitOfWork db)
         {
             _db = db;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Category> objCategoryList = _db.Category.GetAll();
+            IEnumerable<Product> objCategoryList = _db.prorducts.GetAll();
             return View(objCategoryList);
         }
 
@@ -29,16 +30,12 @@ namespace testpr.Controllers
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Category obj)
+        public IActionResult Create(Product obj)
         {
-            if (obj.Name == obj.DisplayOrder.ToString())
-            {
-                ModelState.AddModelError("add custoom error", "the display cannot exactly be the same as name");
-            }
-
+            
             if (ModelState.IsValid)
             {
-                _db.Category.Add(obj);
+                _db.prorducts.Add(obj);
                 _db.Save();
                 TempData["success"] = "data added successfully";
                 return RedirectToAction("Index");
@@ -53,28 +50,23 @@ namespace testpr.Controllers
             {
                 return NotFound();
             }
-            var categoryFromDb = _db.Category.GetFirstOrDefault(u => u.Id == id);
-            if (categoryFromDb == null)
+            var coverTypeFromDb = _db.prorducts.GetFirstOrDefault(u => u.Id == id);
+            if (coverTypeFromDb == null)
             {
                 return NotFound();
             }
             // TODO: do not foget to change this part
-            return View(categoryFromDb);
+            return View(coverTypeFromDb);
         }
 
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Category obj)
+        public IActionResult Edit(Product obj)
         {
-            if (obj.Name == obj.DisplayOrder.ToString())
-            {
-                ModelState.AddModelError("add custoom error", "the display cannot exactly be the same as name");
-            }
-
             if (ModelState.IsValid)
             {
-                _db.Category.Update(obj);
+                _db.prorducts.update(obj);
                 _db.Save();
                 TempData["success"] = "data edited successfully";
                 return RedirectToAction("Index");
@@ -88,13 +80,13 @@ namespace testpr.Controllers
             {
                 return NotFound();
             }
-            var categoryFromDb = _db.Category.GetFirstOrDefault(u=> u.Id == id);
-            if (categoryFromDb == null)
+            var CoverTypeFromDb = _db.prorducts.GetFirstOrDefault(u => u.Id == id);
+            if (CoverTypeFromDb == null)
             {
                 return NotFound();
             }
             // TODO: do not foget to change this part
-            return View(categoryFromDb);
+            return View(CoverTypeFromDb);
         }
 
         //POST
@@ -102,14 +94,14 @@ namespace testpr.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(int? id)
         {
-            var categoryFromDb = _db.Category.GetFirstOrDefault(u => u.Id == id);
-            
-            if (categoryFromDb == null)
+            var ProductFromDb = _db.prorducts.GetFirstOrDefault(u => u.Id == id);
+
+            if (ProductFromDb == null)
             {
                 return NotFound();
             }
 
-            _db.Category.Remove(categoryFromDb);
+            _db.prorducts.Remove(ProductFromDb);
             _db.Save();
             TempData["success"] = "data removed successfully";
             return RedirectToAction("Index");
