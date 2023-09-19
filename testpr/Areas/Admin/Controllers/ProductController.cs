@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 using testpr.Data;
 using testpr.Models;
 using testpr.Repository;
@@ -9,15 +11,15 @@ namespace testpr.Areas.Admin.Controllers
 //[Area("Admin")]
     public class ProductController : Controller
     {
-        private readonly IUnitOfWork _db;
+        private readonly IUnitOfWork _unitOfWork;
         public ProductController(IUnitOfWork db)
         {
-            _db = db;
+            _unitOfWork = db;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Product> objCategoryList = _db.prorducts.GetAll();
+            IEnumerable<Product> objCategoryList = _unitOfWork.prorducts.GetAll();
             return View(objCategoryList);
         }
 
@@ -28,9 +30,24 @@ namespace testpr.Areas.Admin.Controllers
         public IActionResult Upsert(int? id)
         {
             Product prodct = new();
+            IEnumerable<SelectListItem> CatagoryList = _unitOfWork.Category.GetAll().Select(
+                u => new SelectListItem{
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                }
+            );
+            IEnumerable<SelectListItem> CoverTypeList = _unitOfWork.CovreTypes.GetAll().Select(
+               u => new SelectListItem
+               {
+                   Text = u.Name,
+                   Value = u.Id.ToString()
+               }
+           );
             if (id == null || id == 0)
             {
                 //creata product
+                ViewBag.CategoryList = CatagoryList;
+                ViewData["CoverTypeList"] = CoverTypeList;
                 return View(prodct);
             }
             else
@@ -48,8 +65,8 @@ namespace testpr.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.prorducts.update(obj);
-                _db.Save();
+                _unitOfWork.prorducts.update(obj);
+                _unitOfWork.Save();
                 TempData["success"] = "data edited successfully";
                 return RedirectToAction("Index");
             }
@@ -62,7 +79,7 @@ namespace testpr.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            var CoverTypeFromDb = _db.prorducts.GetFirstOrDefault(u => u.Id == id);
+            var CoverTypeFromDb = _unitOfWork.prorducts.GetFirstOrDefault(u => u.Id == id);
             if (CoverTypeFromDb == null)
             {
                 return NotFound();
@@ -76,15 +93,15 @@ namespace testpr.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(int? id)
         {
-            var ProductFromDb = _db.prorducts.GetFirstOrDefault(u => u.Id == id);
+            var ProductFromDb = _unitOfWork.prorducts.GetFirstOrDefault(u => u.Id == id);
 
             if (ProductFromDb == null)
             {
                 return NotFound();
             }
 
-            _db.prorducts.Remove(ProductFromDb);
-            _db.Save();
+            _unitOfWork.prorducts.Remove(ProductFromDb);
+            _unitOfWork.Save();
             TempData["success"] = "data removed successfully";
             return RedirectToAction("Index");
 

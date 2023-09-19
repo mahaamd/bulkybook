@@ -9,15 +9,15 @@ namespace testpr.Areas.Admin.Controllers
 //[Area("Admin")]
     public class CategoryController : Controller
     {
-        private readonly IUnitOfWork _db;
+        private readonly IUnitOfWork _unitOfWork;
         public CategoryController(IUnitOfWork db)
         {
-            _db = db;
+            _unitOfWork = db;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Category> objCategoryList = _db.Category.GetAll();
+            IEnumerable<Category> objCategoryList = _unitOfWork.Category.GetAll();
             return View(objCategoryList);
         }
 
@@ -39,8 +39,8 @@ namespace testpr.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                _db.Category.Add(obj);
-                _db.Save();
+                _unitOfWork.Category.Add(obj);
+                _unitOfWork.Save();
                 TempData["success"] = "data added successfully";
                 return RedirectToAction("Index");
             }
@@ -54,7 +54,7 @@ namespace testpr.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            var categoryFromDb = _db.Category.GetFirstOrDefault(u => u.Id == id);
+            var categoryFromDb = _unitOfWork.Category.GetFirstOrDefault(u => u.Id == id);
             if (categoryFromDb == null)
             {
                 return NotFound();
@@ -75,8 +75,8 @@ namespace testpr.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                _db.Category.Update(obj);
-                _db.Save();
+                _unitOfWork.Category.Update(obj);
+                _unitOfWork.Save();
                 TempData["success"] = "data edited successfully";
                 return RedirectToAction("Index");
             }
@@ -89,7 +89,7 @@ namespace testpr.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            var categoryFromDb = _db.Category.GetFirstOrDefault(u => u.Id == id);
+            var categoryFromDb = _unitOfWork.Category.GetFirstOrDefault(u => u.Id == id);
             if (categoryFromDb == null)
             {
                 return NotFound();
@@ -103,15 +103,15 @@ namespace testpr.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(int? id)
         {
-            var categoryFromDb = _db.Category.GetFirstOrDefault(u => u.Id == id);
+            var categoryFromDb = _unitOfWork.Category.GetFirstOrDefault(u => u.Id == id);
 
             if (categoryFromDb == null)
             {
                 return NotFound();
             }
 
-            _db.Category.Remove(categoryFromDb);
-            _db.Save();
+            _unitOfWork.Category.Remove(categoryFromDb);
+            _unitOfWork.Save();
             TempData["success"] = "data removed successfully";
             return RedirectToAction("Index");
 
