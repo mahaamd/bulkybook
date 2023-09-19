@@ -22,47 +22,29 @@ namespace testpr.Areas.Admin.Controllers
         }
 
         // GET
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        //POST
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(Product obj)
-        {
-            
-            if (ModelState.IsValid)
-            {
-                _db.prorducts.Add(obj);
-                _db.Save();
-                TempData["success"] = "data added successfully";
-                return RedirectToAction("Index");
-            }
-            return View(obj);
-        }
+        
 
         // GET
-        public IActionResult Edit(int? id)
+        public IActionResult Upsert(int? id)
         {
+            Product prodct = new();
             if (id == null || id == 0)
             {
-                return NotFound();
+                //creata product
+                return View(prodct);
             }
-            var coverTypeFromDb = _db.prorducts.GetFirstOrDefault(u => u.Id == id);
-            if (coverTypeFromDb == null)
+            else
             {
-                return NotFound();
+                // add product
             }
-            // TODO: do not foget to change this part
-            return View(coverTypeFromDb);
+            
+            return View(prodct);
         }
 
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Product obj)
+        public IActionResult Upsert(Product obj)
         {
             if (ModelState.IsValid)
             {

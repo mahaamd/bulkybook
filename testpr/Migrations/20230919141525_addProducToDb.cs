@@ -5,7 +5,7 @@
 namespace testpr.Migrations
 {
     /// <inheritdoc />
-    public partial class addProducTODb : Migration
+    public partial class addProducToDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,6 +21,7 @@ namespace testpr.Migrations
                     ISBN = table.Column<int>(type: "int", nullable: false),
                     Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ListPrice = table.Column<double>(type: "float", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
                     price50 = table.Column<double>(type: "float", nullable: false),
                     price100 = table.Column<double>(type: "float", nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),

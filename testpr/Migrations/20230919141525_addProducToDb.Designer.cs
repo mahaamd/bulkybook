@@ -12,8 +12,8 @@ using testpr.Data;
 namespace testpr.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230830191531_addProducTODb")]
-    partial class addProducTODb
+    [Migration("20230919141525_addProducToDb")]
+    partial class addProducToDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -100,6 +100,9 @@ namespace testpr.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<double>("price100")
                         .HasColumnType("float");
