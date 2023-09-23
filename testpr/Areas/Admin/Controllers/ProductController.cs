@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using testpr.Data;
 using testpr.Models;
+using testpr.Models.ViewModels;
 using testpr.Repository;
 using testpr.Repository.IRepository;
 
@@ -29,33 +30,35 @@ namespace testpr.Areas.Admin.Controllers
         // GET
         public IActionResult Upsert(int? id)
         {
-            Product prodct = new();
-            IEnumerable<SelectListItem> CatagoryList = _unitOfWork.Category.GetAll().Select(
-                u => new SelectListItem{
+            ProductVM productVM = new()
+            {
+                Product = new(),
+                CatagoryList = _unitOfWork.Category.GetAll().Select(
+                 u => new SelectListItem
+                 {
+                     Text = u.Name,
+                     Value = u.Id.ToString()
+                 }),
+                CoverTypeList = _unitOfWork.CovreTypes.GetAll().Select(
+                u => new SelectListItem
+                {
                     Text = u.Name,
                     Value = u.Id.ToString()
-                }
-            );
-            IEnumerable<SelectListItem> CoverTypeList = _unitOfWork.CovreTypes.GetAll().Select(
-               u => new SelectListItem
-               {
-                   Text = u.Name,
-                   Value = u.Id.ToString()
-               }
-           );
+                })
+            };
             if (id == null || id == 0)
             {
                 //creata product
-                ViewBag.CategoryList = CatagoryList;
-                ViewData["CoverTypeList"] = CoverTypeList;
-                return View(prodct);
+                //ViewBag.CategoryList = productVM.CatagoryList;
+                //ViewData["CoverTypeList"] = productVM.CoverTypeList;
+                return View(productVM);
             }
             else
             {
                 // add product
             }
             
-            return View(prodct);
+            return View(productVM);
         }
 
         //POST
