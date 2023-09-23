@@ -64,11 +64,11 @@ namespace testpr.Areas.Admin.Controllers
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Upsert(Product obj)
+        public IActionResult Upsert(Product obj, IFormFile file)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.prorducts.update(obj);
+                //_unitOfWork.prorducts.update(obj);
                 _unitOfWork.Save();
                 TempData["success"] = "data edited successfully";
                 return RedirectToAction("Index");

@@ -3,7 +3,7 @@
 
     <div class="border p-3 mt-4 row">
         <div class="row pb-2">
-            <h2 class="text-primary">Edit product</h2>
+            <h2 class="text-primary">@(Model.Product.Id == 0?"Create":"Update") product</h2>
             <hr />
         </div>
         <div asp-validation-summary="All" class="text-danger"></div>
@@ -52,8 +52,8 @@
         
         <div class="mb-3">
             <label asp-for="Product.ImageUrl"></label>
-            <input type="file" class="form-control" />
-            @*<span asp-validation-for="Name" class="text-danger"></span>*@
+            <input id="uploadbox" type="file" class="form-control" />
+            @*<span asp-validation-for="Product.ImageUrl" class="text-danger"</span>*@
         </div>
 
         <div class="mb-3 col-6">
@@ -71,10 +71,17 @@
             </select>
             @*<span asp-validation-for="Name" class="text-danger"></span>*@
         </div>
+        @*<button type="submit" onclick="return ValidteInput()" style="width: 150px" class="btn btn-primary">@(Model.Product.Id == 0 ? "Create" : "Update")</button>*@
             <div class="col-12">
-            <button style="width: 150px" class="btn btn-primary">Update</button>
+            @if(Model.Product.Id == 0)
+            {
+                <button onclick="return ValidteInput()" style="width: 150px" class="btn btn-primary">create</button>
+            }
+            else
+            {
+                <button style="width: 150px" class="btn btn-primary">Update</button>
+            }
             <a  style="width: 150px" asp-controller="Product" asp-action="Index" class="btn btn-secondary"> back to page </a>
-        </div>
     </div>
 
 </form>
@@ -83,4 +90,20 @@
     @{
         <partial name="_ValidationScriptsPartial"></partial>
     }
+    <script>
+        function ValidteInput() {
+                if (document.getElementById('uploadbox').value == ""){
+                    Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'please updload an image',
+                    //footer: '<a href="">Why do I have this issue?</a>'
+                
+                    })
+                    return false;
+                }
+            return true;
+
+        }
+    </script>
 }
