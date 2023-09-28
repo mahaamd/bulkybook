@@ -22,12 +22,9 @@ namespace testpr.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<Product> objCategoryList = _unitOfWork.prorducts.GetAll();
-            return View(objCategoryList);
+            //IEnumerable<Product> objCategoryList = _unitOfWork.prorducts.GetAll();
+            return View();
         }
-
-        // GET
-        
 
         // GET
         public IActionResult Upsert(int? id)
@@ -55,7 +52,12 @@ namespace testpr.Areas.Admin.Controllers
                 //ViewData["CoverTypeList"] = productVM.CoverTypeList;
                 return View(productVM);
             }
-            return View(productVM);
+            else
+            {
+                var existingValue = _unitOfWork.prorducts.GetFirstOrDefault(u => u.Id == id);
+                productVM.Product = existingValue;
+                return View(productVM);
+            }
         }
 
         //POST
@@ -121,13 +123,11 @@ namespace testpr.Areas.Admin.Controllers
 
 
         }
-
-
         #region api calls
         [HttpGet]
         public IActionResult GetAll()
         {
-            var productList = _unitOfWork.prorducts.GetAll();
+            var productList = _unitOfWork.prorducts.GetAll(inclueProperties:"Category,CoverType");
             return Json(new { data = productList});
         }
 

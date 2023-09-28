@@ -12,6 +12,7 @@ namespace testpr.Repository
         public Repository(ApplicationDbContext db)
         {
             _db = db;
+            //_db.products.Include(u => u.Category);
             this.dbSet =_db.Set<T>();
         }
 
@@ -20,13 +21,20 @@ namespace testpr.Repository
             dbSet.Add(item);
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(string? inclueProperties = null)
         {
             IQueryable<T> query = dbSet;
+            if (inclueProperties != null)
+            {
+                foreach (string  item in inclueProperties.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(item);
+                }
+            }
             return query.ToList();
         }
 
-        public T GetFirstOrDefault(Expression<Func<T, bool>> filter)
+        public T GetFirstOrDefault(Expression<Func<T, bool>> filter, string? inclueProperties = null)
         {
             IQueryable<T> query = dbSet;
             query =  query.Where(filter);
