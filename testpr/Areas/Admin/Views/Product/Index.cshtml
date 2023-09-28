@@ -1,5 +1,7 @@
-﻿
-
+﻿@model IEnumerable<Product>
+@{
+    ViewData["Index"] = "index"; 
+}
 @*<h1> Catygory Index </h1>*@
 
 <div class="container p-3">
@@ -36,7 +38,14 @@
     </thead>
     <tbody>
 
-        
+        @foreach (var item in Model)
+        {
+            <td>@item.Name</td>
+            <td>@item.ISBN</td>
+            <td>@item.Price</td>
+            <td>@item.Author</td>
+            <td>@item.Category</td>
+        }
 
     </tbody>
 

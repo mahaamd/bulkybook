@@ -13,9 +13,11 @@ namespace testpr.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public ProductController(IUnitOfWork db)
+        private readonly IWebHostEnvironment _hostEnvironment;
+        public ProductController(IUnitOfWork db, IWebHostEnvironment hostEnvironment)
         {
             _unitOfWork = db;
+            _hostEnvironment = hostEnvironment;
         }
 
         public IActionResult Index()
@@ -53,24 +55,33 @@ namespace testpr.Areas.Admin.Controllers
                 //ViewData["CoverTypeList"] = productVM.CoverTypeList;
                 return View(productVM);
             }
-            else
-            {
-                // add product
-            }
-            
             return View(productVM);
         }
 
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Upsert(Product obj, IFormFile file)
+        public IActionResult Upsert(ProductVM obj, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
-                //_unitOfWork.prorducts.update(obj);
+                string rootPath = _hostEnvironment.WebRootPath;
+                if (file != null) // it means that the file is uploaded
+                {
+                    string fileName = Guid.NewGuid().ToString();
+                    var path = Path.Combine(rootPath, @"images\products");
+                    var extention = Path.GetExtension(file.FileName);
+
+                    using (var filestreams = new FileStream(Path.Combine(path, fileName + extention), FileMode.Create))
+                    {
+                        file.CopyTo(filestreams);
+                    }
+                    obj.Product.ImageUrl = @"images\productsproducts\" + fileName + extention;
+                }
+                _unitOfWork.prorducts.Add(obj.Product);
+                
                 _unitOfWork.Save();
-                TempData["success"] = "data edited successfully";
+                TempData["success"] = "file created successfully successfully";
                 return RedirectToAction("Index");
             }
             return View(obj);
@@ -110,6 +121,18 @@ namespace testpr.Areas.Admin.Controllers
 
 
         }
+
+
+        #region api calls
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var productList = _unitOfWork.prorducts.GetAll();
+            return Json(new { data = productList});
+        }
+
+        #endregion
+
     }
 
 }

@@ -1,9 +1,9 @@
 ﻿@model testpr.Models.ViewModels.ProductVM
-<form method="post" asp-action="Edit" enctype="multipart/form-data">
+<form method="post" asp-action="Upsert" enctype="multipart/form-data">
 
     <div class="border p-3 mt-4 row">
         <div class="row pb-2">
-            <h2 class="text-primary">@(Model.Product.Id == 0?"Create":"Update") product</h2>
+            <h2 class="text-primary">@(Model.Product.Id == 0 ? "Create" : "Update") product</h2>
             <hr />
         </div>
         <div asp-validation-summary="All" class="text-danger"></div>
@@ -23,12 +23,12 @@
             <label asp-for="Product.ISBN"></label>
             <input asp-for="Product.ISBN" class="form-control" />
             @*<span asp-validation-for="Name" class="text-danger"></span>*@
-        </div>       
+        </div>
         <div class="mb-3 col-6">
             <label asp-for="Product.Author"></label>
             <input asp-for="Product.Author" class="form-control" />
             @*<span asp-validation-for="Name" class="text-danger"></span>*@
-        </div>        
+        </div>
         <div class="mb-3 col-6">
             <label asp-for="Product.ListPrice"></label>
             <input asp-for="Product.ListPrice" class="form-control" />
@@ -49,10 +49,10 @@
             <input asp-for="Product.price100" class="form-control" />
             @*<span asp-validation-for="Name" class="text-danger"></span>*@
         </div>
-        
+
         <div class="mb-3">
             <label asp-for="Product.ImageUrl"></label>
-            <input id="uploadbox" type="file" class="form-control" />
+            <input id="uploadbox" name="file" type="file" class="form-control" />
             @*<span asp-validation-for="Product.ImageUrl" class="text-danger"</span>*@
         </div>
 
@@ -63,17 +63,17 @@
             </select>
             @*<span asp-validation-for="Name" class="text-danger"></span>*@
         </div>
-        
+
         <div class="mb-3 col-6">
             <label asp-for="Product.CoverTypeId"></label>
-            <select asp-for="Product.CategoryId" asp-items=@Model.CoverTypeList class="form-select">
+            <select asp-for="Product.CoverTypeId" asp-items=@Model.CoverTypeList class="form-select">
                 <option disabled selected>--select cover type--</option>
             </select>
             @*<span asp-validation-for="Name" class="text-danger"></span>*@
         </div>
         @*<button type="submit" onclick="return ValidteInput()" style="width: 150px" class="btn btn-primary">@(Model.Product.Id == 0 ? "Create" : "Update")</button>*@
-            <div class="col-12">
-            @if(Model.Product.Id == 0)
+        <div class="col-12">
+            @if (Model.Product.Id == 0)
             {
                 <button onclick="return ValidteInput()" style="width: 150px" class="btn btn-primary">create</button>
             }
@@ -81,9 +81,9 @@
             {
                 <button style="width: 150px" class="btn btn-primary">Update</button>
             }
-            <a  style="width: 150px" asp-controller="Product" asp-action="Index" class="btn btn-secondary"> back to page </a>
+            <a style="width: 150px" asp-controller="Product" asp-action="Index" class="btn btn-secondary"> back to page </a>
+        </div>
     </div>
-
 </form>
 
 @section Scripts {
@@ -92,16 +92,16 @@
     }
     <script>
         function ValidteInput() {
-                if (document.getElementById('uploadbox').value == ""){
-                    Swal.fire({
+            if (document.getElementById('uploadbox').value == "") {
+                Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
                     text: 'please updload an image',
                     //footer: '<a href="">Why do I have this issue?</a>'
-                
-                    })
-                    return false;
-                }
+
+                })
+                return false;
+            }
             return true;
 
         }

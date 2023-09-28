@@ -1,6 +1,8 @@
 ﻿using MessagePack;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.Build.Framework;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace testpr.Models
 {
@@ -23,20 +25,26 @@ namespace testpr.Models
         public double Price { get; set; }
         [System.ComponentModel.DataAnnotations.Required]
         [Range(1, 10000)]
-
+        
         public double price50 { get; set; }
 
         [System.ComponentModel.DataAnnotations.Required]
         [Range(1, 10000)]
         public double price100 { get; set; }
+        
+        [ValidateNever]
         public string ImageUrl { get; set; }
         
         [System.ComponentModel.DataAnnotations.Required]
         public int CategoryId { get; set; }
-        public Category category;
+        [ForeignKey("CategoryId")]
+        [ValidateNever]
+        public Category Category { get; set; }
 
         [System.ComponentModel.DataAnnotations.Required]
         public int CoverTypeId { get; set; }
+        [ForeignKey("CoverTypeId")]
+        [ValidateNever]
         public CoverType CoverType { get; set; }
     }
 }

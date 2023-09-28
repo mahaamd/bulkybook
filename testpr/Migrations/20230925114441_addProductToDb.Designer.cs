@@ -12,8 +12,8 @@ using testpr.Data;
 namespace testpr.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230919141525_addProducToDb")]
-    partial class addProducToDb
+    [Migration("20230925114441_addProductToDb")]
+    partial class addProductToDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -112,6 +112,8 @@ namespace testpr.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("CoverTypeId");
 
                     b.ToTable("products");
@@ -119,11 +121,19 @@ namespace testpr.Migrations
 
             modelBuilder.Entity("testpr.Models.Product", b =>
                 {
+                    b.HasOne("testpr.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("testpr.Models.CoverType", "CoverType")
                         .WithMany()
                         .HasForeignKey("CoverTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Category");
 
                     b.Navigation("CoverType");
                 });

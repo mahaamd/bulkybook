@@ -5,7 +5,7 @@
 namespace testpr.Migrations
 {
     /// <inheritdoc />
-    public partial class addProducToDb : Migration
+    public partial class addProductToDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,12 +32,23 @@ namespace testpr.Migrations
                 {
                     table.PrimaryKey("PK_products", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_products_categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_products_coverTypes_CoverTypeId",
                         column: x => x.CoverTypeId,
                         principalTable: "coverTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_products_CategoryId",
+                table: "products",
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_products_CoverTypeId",
